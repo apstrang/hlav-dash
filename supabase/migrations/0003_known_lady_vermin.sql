@@ -1,0 +1,1 @@
+ALTER TABLE "user_roles" ADD COLUMN "can_delete_all" boolean DEFAULT false;
