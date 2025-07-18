@@ -1,0 +1,1 @@
+ALTER TABLE "events" ALTER COLUMN "owned_by" SET NOT NULL;

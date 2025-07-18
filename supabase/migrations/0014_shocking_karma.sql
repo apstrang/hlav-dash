@@ -1,0 +1,1 @@
+CREATE POLICY "users can modify their own data" ON "events" AS PERMISSIVE FOR ALL TO "authenticated" USING (exists(select 1 from profiles where auth.uid() = profiles.id)) WITH CHECK (exists(select 1 from profiles where auth.uid() = profiles.id));

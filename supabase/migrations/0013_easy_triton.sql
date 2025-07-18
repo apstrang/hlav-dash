@@ -1,0 +1,1 @@
+DROP POLICY "users can modify their own data" ON "events" CASCADE;

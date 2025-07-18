@@ -2,7 +2,7 @@ import { sql } from "drizzle-orm/sql"
 import { foreignKey, pgPolicy, integer, interval, pgTable, varchar, uuid, text, boolean, timestamp } from "drizzle-orm/pg-core"
 import { authUsers, authenticatedRole } from "drizzle-orm/supabase"
 import { timestamps } from "@/db/helpers/columns.helpers"
-
+import * as t from "drizzle-orm/pg-core"
 
 // PROFILES //
 
@@ -66,16 +66,16 @@ export const rolesTable = pgTable(
 export const eventsTable = pgTable(
 	'events',
 	{
-		id: uuid('id').primaryKey(),
+		id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
 		ownedBy: uuid('owned_by').notNull(),
 		createdBy: uuid('created_by').notNull(),
 		source: varchar('source').notNull().default('internal'),
 		externalId: varchar('external_id'),
 		title: varchar('title').notNull(),
-		startsAt: timestamp('starts_at').notNull(),
-		endsAt: timestamp('ends_at').notNull(),
+		start: timestamp('starts_at').notNull(),
+		end: timestamp('ends_at').notNull(),
 		color: varchar('color'),
-		isPending: boolean('is_pending').notNull(),
+		isPending: boolean('is_pending'),
 		lastSync: timestamp('last_sync'),
 		syncStatus: varchar('sync_status'),
 		msTag: varchar('ms_etag'),
@@ -97,6 +97,12 @@ export const eventsTable = pgTable(
 			for: 'select',
 			to: authenticatedRole,
 			using: sql`true`,
+		}),
+		pgPolicy("users can modify their own data", {
+			for: 'all',
+			to: authenticatedRole,
+			using: sql`exists(select 1 from profiles where auth.uid() = profiles.id)`,
+			withCheck: sql`exists(select 1 from profiles where auth.uid() = profiles.id)`,
 		}),
 	]
 );
