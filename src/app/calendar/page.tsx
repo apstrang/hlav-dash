@@ -1,5 +1,6 @@
-'use client'
 
+
+/*
 import CalendarApp from '@/components/calendar/Calendar'
 import { useState } from 'react'
 import { createEventAction } from './actions'
@@ -33,5 +34,32 @@ export default function Page() {
 				{loading ? 'Creating...' : 'Create Event'}
 			</button>
 		</form>
+	)
+}
+*/
+'use client'
+
+import SchedulerWithResources from '@/components/calendar/ResourceSchedule'
+import CreateEventForm from '@/components/calendar/CreateEventForm'
+import { useState } from 'react'
+import Overview from '@/components/calendar/overview'
+
+/*
+export default function CalendarPage() {
+	const [refreshKey, setRefreshKey] = useState(0)
+
+	return (
+		<div>
+			<CreateEventForm onCreated={() => setRefreshKey((k) => k + 1)} />
+			<SchedulerWithResources key={refreshKey} />
+		</div>
+	)
+}
+*/
+
+
+export default function CalendarPage() {
+	return (
+		<Overview />
 	)
 }
